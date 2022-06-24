@@ -2,6 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +14,7 @@ import '../games_services/games_services.dart';
 import '../settings/settings.dart';
 import '../style/palette.dart';
 import '../style/responsive_screen.dart';
+import 'package:flutter/cupertino.dart';
 
 class MainMenuScreen extends StatelessWidget {
   const MainMenuScreen({super.key});
@@ -21,35 +24,43 @@ class MainMenuScreen extends StatelessWidget {
     final palette = context.watch<Palette>();
     final gamesServicesController = context.watch<GamesServicesController?>();
     final settingsController = context.watch<SettingsController>();
-    final audioController = context.watch<AudioController>();
+    // final audioController = context.watch<AudioController>();
 
     return Scaffold(
       backgroundColor: palette.backgroundMain,
       body: ResponsiveScreen(
         mainAreaProminence: 0.45,
-        squarishMainArea: Center(
-          child: Transform.rotate(
-            angle: -0.1,
-            child: const Text(
-              'Dice Wars!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Permanent Marker',
-                fontSize: 55,
-                height: 1,
+        squarishMainArea: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Transform.rotate(
+              angle: -0.1,
+              child: const Text(
+                'Dice Wars!!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: 'Permanent Marker',
+                  fontSize: 55,
+                  height: 1,
+                ),
               ),
             ),
-          ),
+            SizedBox(
+              height: 30,
+            ),
+            Image.asset(
+              'assets/images/dice-banner.png',
+              width: 200,
+            )
+          ],
         ),
         rectangularMenuArea: Column(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            ElevatedButton(
-              onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/play');
-              },
-              child: const Text('Play'),
+            Button(
+              text: 'Play',
+              page: '/play',
             ),
             _gap,
             if (gamesServicesController != null) ...[
@@ -70,9 +81,9 @@ class MainMenuScreen extends StatelessWidget {
               ),
               _gap,
             ],
-            ElevatedButton(
-              onPressed: () => GoRouter.of(context).go('/settings'),
-              child: const Text('Settings'),
+            Button(
+              text: 'Settings',
+              page: '/settings',
             ),
             _gap,
             Padding(
@@ -88,7 +99,7 @@ class MainMenuScreen extends StatelessWidget {
               ),
             ),
             _gap,
-            const Text('Music by Mr Smith, Yo'),
+            const Text('Music by Mr Smith'),
             _gap,
           ],
         ),
@@ -120,4 +131,37 @@ class MainMenuScreen extends StatelessWidget {
   }
 
   static const _gap = SizedBox(height: 10);
+}
+
+class Button extends StatelessWidget {
+  const Button({
+    Key? key,
+    required this.page,
+    required this.text,
+  }) : super(key: key);
+
+  final String page;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    // final AudioController audioController;
+    final audioController = context.watch<AudioController>();
+
+    return Container(
+        margin: EdgeInsets.symmetric(vertical: 5),
+        child: TextButton(
+          onPressed: () {
+            audioController.playSfx(SfxType.buttonTap);
+            GoRouter.of(context).go(page);
+          },
+          child: Center(
+              widthFactor: 10,
+              heightFactor: 0,
+              child: Text(
+                text,
+                style: TextStyle(fontSize: 20),
+              )),
+        ));
+  }
 }

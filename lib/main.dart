@@ -2,7 +2,10 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -237,23 +240,42 @@ class MyApp extends StatelessWidget {
         child: Builder(builder: (context) {
           final palette = context.watch<Palette>();
 
-          return MaterialApp.router(
-            title: 'Flutter Demo',
-            theme: ThemeData.from(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: palette.darkPen,
-                background: palette.backgroundMain,
-              ),
-              textTheme: TextTheme(
-                bodyText2: TextStyle(
-                  color: palette.ink,
-                ),
-              ),
-            ),
-            routeInformationParser: _router.routeInformationParser,
-            routerDelegate: _router.routerDelegate,
-            scaffoldMessengerKey: scaffoldMessengerKey,
-          );
+          return Platform.isIOS
+              ? CupertinoApp.router(
+                  title: 'Flutter Demo',
+                  // theme: ThemeData.from(
+                  //   colorScheme: ColorScheme.fromSeed(
+                  //     seedColor: palette.darkPen,
+                  //     background: palette.backgroundMain,
+                  //   ),
+                  //   textTheme: TextTheme(
+                  //     bodyText2: TextStyle(
+                  //       color: palette.ink,
+                  //     ),
+                  //   ),
+                  // ),
+                  routeInformationParser: _router.routeInformationParser,
+                  routerDelegate: _router.routerDelegate,
+                  // scaffoldMessengerKey: scaffoldMessengerKey,
+                )
+              : MaterialApp.router(
+                  title: 'Flutter Demo',
+                  theme: ThemeData.from(
+                    useMaterial3: true,
+                    colorScheme: ColorScheme.fromSeed(
+                      seedColor: palette.darkPen,
+                      background: palette.backgroundMain,
+                    ),
+                    textTheme: TextTheme(
+                      bodyText2: TextStyle(
+                        color: palette.ink,
+                      ),
+                    ),
+                  ),
+                  routeInformationParser: _router.routeInformationParser,
+                  routerDelegate: _router.routerDelegate,
+                  scaffoldMessengerKey: scaffoldMessengerKey,
+                );
         }),
       ),
     );
