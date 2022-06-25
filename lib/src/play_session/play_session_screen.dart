@@ -75,20 +75,31 @@ class _PlaySessionScreenState extends State<PlaySessionScreen> {
                         ),
                       ),
                     ),
-                    const Spacer(),
-                    Text('Drag the slider to ${widget.level.difficulty}%'
-                        ' or above!'),
-                    Consumer<LevelState>(
-                      builder: (context, levelState, child) => Slider(
-                        label: 'Level Progress',
-                        autofocus: true,
-                        value: levelState.progress / 100,
-                        onChanged: (value) =>
-                            levelState.setProgress((value * 100).round()),
-                        onChangeEnd: (value) => levelState.evaluate(),
+                    // const Spacer(),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                                // width: MediaQuery.of(context).size.width,
+                                color: Colors.amber,
+                                child:
+                                    const Text('Place to display dice value')),
+                          ),
+                          Expanded(
+                            flex: 2,
+                            child: Container(
+                                // width: MediaQuery.of(context).size.width,
+                                color: Colors.deepOrangeAccent,
+                                child: const Text('Place to display map')),
+                          ),
+                        ],
                       ),
                     ),
-                    const Spacer(),
+
+                    // const Spacer(),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: SizedBox(

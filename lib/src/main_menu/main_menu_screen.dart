@@ -150,18 +150,32 @@ class Button extends StatelessWidget {
 
     return Container(
         margin: EdgeInsets.symmetric(vertical: 5),
-        child: TextButton(
-          onPressed: () {
-            audioController.playSfx(SfxType.buttonTap);
-            GoRouter.of(context).go(page);
-          },
-          child: Center(
-              widthFactor: 10,
-              heightFactor: 0,
-              child: Text(
-                text,
-                style: TextStyle(fontSize: 20),
-              )),
-        ));
+        child: Platform.isIOS
+            ? CupertinoButton(
+                onPressed: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  GoRouter.of(context).go(page);
+                },
+                child: Center(
+                    widthFactor: 10,
+                    heightFactor: 0,
+                    child: Text(
+                      text,
+                      style: TextStyle(fontSize: 20),
+                    )),
+              )
+            : ElevatedButton(
+                onPressed: () {
+                  audioController.playSfx(SfxType.buttonTap);
+                  GoRouter.of(context).go(page);
+                },
+                child: Center(
+                    widthFactor: 10,
+                    heightFactor: 0,
+                    child: Text(
+                      text,
+                      style: TextStyle(fontSize: 20),
+                    )),
+              ));
   }
 }
